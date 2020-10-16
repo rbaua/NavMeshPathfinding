@@ -33,7 +33,7 @@ def find_path (source_point, destination_point, mesh):
             print('gottem')
             #return path
         else:
-            for new in mesh['adj'][current_node]:
+            for new in mesh['adj'][current_node]:       #(haven't figured out how to do this part yet)
                 #if new.prev == none
                     #new.prev = current_node
                     #push new to queue
