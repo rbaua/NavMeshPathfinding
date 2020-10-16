@@ -17,8 +17,10 @@ def find_path (source_point, destination_point, mesh):
     """
     path = []
     boxes = {}
-    bfsqueue = queue.Queue(0)
-    bfsqueue.put([source_point, None])                  #[node, previous]
+    #bfsqueue = queue.Queue(0)
+    #bfsqueue.put([source_point, None])                  #[node, previous]
+    
+    
     source_box = ()
     dest_box = ()
     for box in mesh['boxes']:                           #get the box for source_point and destination_point
@@ -27,13 +29,17 @@ def find_path (source_point, destination_point, mesh):
         if point_within_box(destination_point, box):
             dest_box = box
 
+    queue = [(0, source_box)]
+
     while queue:                                        #breadth first search
-        current_node = bfsqueue.get()
+        #current_node = bfsqueue.get()
+        dist, current_box = headpop(queue)
         if(current_node == destination_point):
             print('gottem')
             #return path
         else:
-            for new in mesh['adj'][current_node]:       #(haven't figured out how to do this part yet)
+            for adj_box in mesh['adj'][current_box]:
+            #for new in mesh['adj'][current_node]:       #(haven't figured out how to do this part yet)
                 #if new.prev == none
                     #new.prev = current_node
                     #push new to queue
