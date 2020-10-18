@@ -58,3 +58,48 @@ def box_of_point(mesh, point):
         if point_within_box(point, box):
             return box
     return False
+
+def euclidean(tupleA, tupleB):
+    base1 = (tupleA[0] - tupleB[0])
+    base1 *= base1
+    #print(base1)
+    base2 = (tupleA[1] - tupleB[1])
+    base2 *= base2
+    #print(base2)
+    return math.sqrt(base1+base2)
+
+
+def findDetailPoint(boxA, boxB, originPoint):
+    bAx1 = boxA[0]
+    bAx2 = boxA[1]
+    bAy1 = boxA[2]
+    bAy2 = boxA[3]
+
+    bBx1 = boxB[0]
+    bBx2 = boxB[1]
+    bBy1 = boxB[2]
+    bBy2 = boxB[3]
+
+    maxX, minX = [max(bAx1, bBx1), min(bAx2, bBx2)]
+    maxY, minY = [max(bAy1, bBy1), min(bAy2, bBy2)]
+
+    
+    distanceA = euclidean(originPoint, (minX, minY))
+    distanceB = euclidean(originPoint, (maxX, maxY))
+
+    if minX == maxX: #vertical
+        if distanceA < distanceB:
+            return (minX, minY)
+        elif distanceB < distanceB:
+            return (maxX, maxY)
+        else:
+            newX = minX + ((maxX - minX)/2)
+            return (newX, originPoint[1])
+    if minY == maxY: #horizontal
+        if distanceA < distanceB:
+            return (minX, minY)
+        elif distanceB < distanceB:
+            return (maxX, maxY)
+        else:
+            newY = minY + ((maxY - minY)/2)
+            return (originPoint[0], newY)
