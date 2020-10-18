@@ -1,4 +1,4 @@
-import queue
+import math
 from heapq import heappop, heappush
 
 def find_path (source_point, destination_point, mesh):
@@ -32,23 +32,32 @@ def find_path (source_point, destination_point, mesh):
 
     queue = [(0, source_box)]
 
+    distances = {}
+    distances[source_point] = 0
+
+    backpointers = {}
+    backpointers[source_point] = None
+
     while queue:                                        #breadth first search
-        #current_node = bfsqueue.get()
-        dist, current_box = heappop(queue)
-        if(current_box == destination_point):
+        current_dist, current_box = heappop(queue)
+        distances[current_box] = 1
+        current_box_value = box_of_point(mesh, current_box)
+        print(current_box, 'current box')
+        print(current_box_value, 'box value')
+        if(current_box_value == dest_box):
             print('gottem')
             #return path
         else:
-            for adj_box in mesh['adj'][current_box]:
-            #for new in mesh['adj'][current_node]:       #(haven't figured out how to do this part yet)
-                #if new.prev == none
-                    #new.prev = current_node
-                    #push new to queue
-                print()
+            for adj_box in mesh['adj'][current_box_value]:
+                pathcost = euclidean(current_box, box_center(adj_box)) + current_dist
+                if adj_box not in backpointers or pathcost < distances[adj_box]:
+                    distances[adj_box] = pathcost
+                    backpointers[adj_box] = current_box
+                    heappush(queue, (pathcost, adj_box))
     return path, boxes.keys()
 
 def point_within_box(point, box):                       #check if a point is within a given box
-    if box[0] < point[0] and box[1] > point[0] and box[2] < point[1] and box[3] > point[1]:
+    if box[0] < point[0] and box[1] < point[0] and box[2] > point[1] and box[3] > point[1]:
         return True
     else:
         return False
@@ -103,3 +112,6 @@ def findDetailPoint(boxA, boxB, originPoint):
         else:
             newY = minY + ((maxY - minY)/2)
             return (originPoint[0], newY)
+
+def box_center(box):
+    return ((box[0] + box[2])/2, (box[1] + box[3])/2)
