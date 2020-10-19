@@ -100,7 +100,9 @@ def find_path (source_point, destination_point, mesh):
             break
     path = front_to_back
     path.append(back_to_front)
-    return (path, forward_distances.keys())
+    keys = list(forward_distances.keys())
+    keys.append(list(backward_distances.keys()))
+    return (path, keys)
 
 def point_within_box(point, box):                       #check if a point is within a given box
     if box[0] <= point[0] and box[1] >= point[0] and box[2] <= point[1] and box[3] >= point[1]:
