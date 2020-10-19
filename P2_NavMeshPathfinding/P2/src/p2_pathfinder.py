@@ -80,29 +80,29 @@ def find_path (source_point, destination_point, mesh):
     midpoint = current_box
     ftb_box = midpoint
     btf_box = midpoint
-    back_to_front = [destination_point]
-    front_to_back = [source_point]
+    back_to_front = []
     while btf_box:
         back_to_front.append(detail_points[btf_box])
         btf_box = backward_backpointers[btf_box]
-        back_to_front.append(detail_points[btf_box])
+        if(btf_box):
+            back_to_front.append(detail_points[btf_box])
         if (btf_box == dest_box):
-            back_to_front.append(destination_point)
+            #back_to_front.append(destination_point)
             break
 
-    front_to_back = [source_point]
+    front_to_back = []
     while ftb_box:
         front_to_back.append(detail_points[ftb_box])
         ftb_box = forward_backpointers[ftb_box]
-        front_to_back.append(detail_points[ftb_box])
+        if(ftb_box):
+            front_to_back.append(detail_points[ftb_box])
         if (ftb_box == source_box):
-            front_to_back.append(source_point)
+            #front_to_back.append(source_point)
             break
-    path = front_to_back
-    path.append(back_to_front)
-    keys = list(forward_distances.keys())
-    keys.append(list(backward_distances.keys()))
-    return (path, keys)
+    path = back_to_front
+    list.reverse(front_to_back)
+    path.extend(front_to_back)
+    return (path, boxes.keys())
 
 def point_within_box(point, box):                       #check if a point is within a given box
     if box[0] <= point[0] and box[1] >= point[0] and box[2] <= point[1] and box[3] >= point[1]:
