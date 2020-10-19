@@ -56,7 +56,7 @@ def find_path (source_point, destination_point, mesh):
                 adj_point = findDetailPoint(current_box_value, adj_box, current_box)
                 print(adj_point, 'adj point')
                 pathcost = euclidean(current_box, adj_point) + current_dist
-                if adj_box not in backpointers or pathcost < distances[adj_box]:
+                if adj_point not in backpointers or pathcost < distances[adj_point]:
                     distances[adj_point] = pathcost
                     backpointers[adj_point] = current_box
                     heappush(queue, (pathcost, adj_point))
@@ -106,7 +106,7 @@ def findDetailPoint(boxA, boxB, originPoint):
     if minX == maxX: #vertical
         if distanceA < distanceB:
             return (minX, minY)
-        elif distanceB < distanceB:
+        elif distanceB < distanceA:
             return (maxX, maxY)
         else:
             newX = minX + ((maxX - minX)/2)
@@ -114,7 +114,7 @@ def findDetailPoint(boxA, boxB, originPoint):
     if minY == maxY: #horizontal
         if distanceA < distanceB:
             return (minX, minY)
-        elif distanceB < distanceB:
+        elif distanceB < distanceA:
             return (maxX, maxY)
         else:
             newY = minY + ((maxY - minY)/2)
