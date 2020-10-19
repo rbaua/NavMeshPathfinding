@@ -38,27 +38,23 @@ def find_path (source_point, destination_point, mesh):
 
     while queue:                                        #djikstras
         current_dist, current_box = heappop(queue)
-        #current_box_value = box_of_point(mesh['boxes'], current_box)
         if(current_box == dest_box):
             print('gottem')
             #path = [current_box]
-
+            print(backpointers)
             #current_back_node = backpointers[dest_box]
-            # while current_back_node is not None:
+            #while current_back_node is not None:
             #    path.append(current_back_node)
-            #   print(current_back_node)
-            #    print(backpointers, 'backpointers')
             #    current_back_node = backpointers[current_back_node]
             return path[::-1], boxes.keys()
         else:
             for adj_box in mesh['adj'][current_box]:
                 adj_point = findDetailPoint(current_box, adj_box, current_box)
-                print(adj_point, 'adj point')
-                pathcost = euclidean(current_box, adj_point) + current_dist + euclidean(adj_point, destination_point)
-                if adj_box not in distances or pathcost < distances[adj_point]:
+                pathcost = euclidean(current_box, adj_point) + euclidean(adj_point, destination_point)
+                if adj_point not in distances or pathcost < distances[adj_point]:
                     distances[adj_point] = pathcost
-                    backpointers[adj_point] = current_box
-                    heappush(queue, (pathcost, adj_box))
+                    backpointers[adj_box] = current_box
+                    heappush(queue, (euclidean(adj_point, destination_point), adj_box))
                     boxes[adj_box] = current_box
     return path, boxes.keys()
 
@@ -67,12 +63,6 @@ def point_within_box(point, box):                       #check if a point is wit
         return True
     else:
         return False
-
-def box_of_point(boxlist, point):
-    for box in boxlist:                           #get the box for a given point
-        if point_within_box(point, box):
-            return box
-    return False
 
 def euclidean(tupleA, tupleB):
     base1 = (tupleA[0] - tupleB[0])
