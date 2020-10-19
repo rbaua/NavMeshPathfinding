@@ -53,7 +53,7 @@ def find_path (source_point, destination_point, mesh):
 					detail_points[adj_box] = adj_point
 					distances[adj_box] = pathcost
 					backpointers[adj_point] = current_box
-					queue_dist = pathcost + euclidean(adj_point, destination_point)
+					queue_dist = euclidean(adj_point, destination_point)
 					heappush(queue, (queue_dist, adj_box))
 					boxes[adj_box] = current_box
 	
