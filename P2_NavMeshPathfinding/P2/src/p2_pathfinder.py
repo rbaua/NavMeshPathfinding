@@ -100,7 +100,7 @@ def find_path (source_point, destination_point, mesh):
             #front_to_back.append(source_point)
             break
     path = back_to_front
-    list.reverse(front_to_back)
+    #list.reverse(front_to_back)
     path.extend(front_to_back)
     return (path, boxes.keys())
 
