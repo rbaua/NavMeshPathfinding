@@ -18,9 +18,6 @@ def find_path (source_point, destination_point, mesh):
     """
     path = []
     boxes = {}
-    #bfsqueue = queue.Queue(0)
-    #bfsqueue.put([source_point, None])                  #[node, previous]
-    
     
     source_box = ()
     dest_box = ()
@@ -30,7 +27,7 @@ def find_path (source_point, destination_point, mesh):
         if point_within_box(destination_point, box):
             dest_box = box
 
-    queue = [(0, source_box)]
+    queue = [(0, source_point)]
 
     distances = {}
     distances[source_point] = 0
@@ -38,32 +35,42 @@ def find_path (source_point, destination_point, mesh):
     backpointers = {}
     backpointers[source_point] = None
 
-    while queue:                                        #breadth first search
+    boxes[source_box] = (None, source_point)
+
+    while queue:                                        #djikstras
         current_dist, current_box = heappop(queue)
-        distances[current_box] = 1
-        current_box_value = box_of_point(mesh, current_box)
-        print(current_box, 'current box')
-        print(current_box_value, 'box value')
+        current_box_value = box_of_point(mesh['boxes'], current_box)
         if(current_box_value == dest_box):
             print('gottem')
-            #return path
+            path = [current_box]
+
+            current_back_node = backpointers[current_box]
+            while current_back_node is not None:
+                path.append(current_back_node)
+                print(current_back_node)
+                print(backpointers, 'backpointers')
+                current_back_node = backpointers[current_back_node]
+            return path[::-1], boxes.keys()
         else:
             for adj_box in mesh['adj'][current_box_value]:
-                pathcost = euclidean(current_box, box_center(adj_box)) + current_dist
+                adj_point = findDetailPoint(current_box_value, adj_box, current_box)
+                print(adj_point, 'adj point')
+                pathcost = euclidean(current_box, adj_point) + current_dist
                 if adj_box not in backpointers or pathcost < distances[adj_box]:
-                    distances[adj_box] = pathcost
-                    backpointers[adj_box] = current_box
-                    heappush(queue, (pathcost, adj_box))
+                    distances[adj_point] = pathcost
+                    backpointers[adj_point] = current_box
+                    heappush(queue, (pathcost, adj_point))
+                    boxes[current_box_value] = (current_box, adj_point)
     return path, boxes.keys()
 
 def point_within_box(point, box):                       #check if a point is within a given box
-    if box[0] < point[0] and box[1] < point[0] and box[2] > point[1] and box[3] > point[1]:
+    if box[0] <= point[0] and box[1] >= point[0] and box[2] <= point[1] and box[3] >= point[1]:
         return True
     else:
         return False
 
-def box_of_point(mesh, point):
-    for box in mesh['boxes']:                           #get the box for a given point
+def box_of_point(boxlist, point):
+    for box in boxlist:                           #get the box for a given point
         if point_within_box(point, box):
             return box
     return False
