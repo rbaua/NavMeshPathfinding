@@ -27,6 +27,14 @@ def find_path (source_point, destination_point, mesh):
         if point_within_box(destination_point, box):
             dest_box = box
 
+    if(source_box == dest_box):
+        boxes[source_box] = dest_box
+        return ([source_point, destination_point], boxes.keys())
+    elif source_box in mesh['adj'][dest_box]:
+        boxes[source_box] = dest_box
+        boxes[dest_box] = source_box
+        return([source_point, findDetailPoint(source_box, dest_box, source_point), destination_point], boxes.keys())
+
     queue = [(0, source_box, 'destination')]
     heappush(queue, (0, dest_box, 'source'))
 
