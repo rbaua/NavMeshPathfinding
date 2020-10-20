@@ -111,9 +111,10 @@ def find_path (source_point, destination_point, mesh):
         if(ftb_box):
             front_to_back.append(detail_points[ftb_box])
 
-    path = front_to_back
+    
     list.reverse(back_to_front)
-    path.extend(back_to_front)
+    path = back_to_front
+    path.extend(front_to_back)
     return (path, boxes.keys())
 
 def point_within_box(point, box):                       #check if a point is within a given box
