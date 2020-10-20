@@ -27,7 +27,10 @@ def find_path (source_point, destination_point, mesh):
         if point_within_box(destination_point, box):
             dest_box = box
 
-    if(source_box == dest_box):
+    if source_box == () or dest_box == () or source_box == None or dest_box == None:
+        print("No path possible")
+        return (path, boxes.keys())
+    elif(source_box == dest_box):
         boxes[source_box] = dest_box
         return ([source_point, destination_point], boxes.keys())
     elif source_box in mesh['adj'][dest_box]:
@@ -118,11 +121,6 @@ def point_within_box(point, box):                       #check if a point is wit
     else:
         return False
 
-def box_of_point(boxlist, point):
-    for box in boxlist:                           #get the box for a given point
-        if point_within_box(point, box):
-            return box
-    return False
 
 def euclidean(tupleA, tupleB):
     base1 = (tupleA[0] - tupleB[0])
