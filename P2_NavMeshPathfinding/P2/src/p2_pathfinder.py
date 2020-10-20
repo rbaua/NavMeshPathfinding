@@ -146,26 +146,33 @@ def findDetailPoint(boxA, boxB, originPoint):
     maxX, minX = [max(bAx1, bBx1), min(bAx2, bBx2)]
     maxY, minY = [max(bAy1, bBy1), min(bAy2, bBy2)]
 
-    
-    distanceA = euclidean(originPoint, (minX, minY))
-    distanceB = euclidean(originPoint, (maxX, maxY))
+    detailPoint = [0,0]
+
+    #print ("minx",minX, maxX, minY, maxY)
+    #print ("o",originPoint)
+
+
 
     if minX == maxX: #vertical
-        if distanceA < distanceB:
-            return (minX, minY)
-        elif distanceB < distanceA:
-            return (maxX, maxY)
+        detailPoint[0] = minX
+        #print("vertical")
+        if (originPoint[1]) > minY:
+            detailPoint[1] = minY
+        elif (originPoint[1] < maxY):
+            detailPoint[1] = maxY
         else:
-            newX = minX + ((maxX - minX)/2)
-            return (newX, originPoint[1])
+            detailPoint[1] = originPoint[1]
+        
     if minY == maxY: #horizontal
-        if distanceA < distanceB:
-            return (minX, minY)
-        elif distanceB < distanceA:
-            return (maxX, maxY)
+        detailPoint[1] = minY
+        #print("horizontal")
+        if (originPoint[0]) > minX:
+            detailPoint[0] = minX
+        elif (originPoint[0] < maxX):
+            detailPoint[0] = maxX
         else:
-            newY = minY + ((maxY - minY)/2)
-            return (originPoint[0], newY)
+            detailPoint[0] = originPoint[0]
 
+    return detailPoint
 def box_center(box):
     return ((box[0] + box[2])/2, (box[1] + box[3])/2)
